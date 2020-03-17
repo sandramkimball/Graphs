@@ -20,6 +20,11 @@ class Graph:
             print('Error, vertex does not exist.')
             raise ValueException
 
+#   PART 2
+#   Sets = no duplicates, 0(1)
+#   though arrays are better for memory
+#   Graphs vs Trees: graphs are cycles
+
     def bft(self, starting_vertex):
         # create a queue
         q = Queue()
@@ -62,26 +67,22 @@ class Graph:
                     s.push(neighbor)
 
     def dft_recursive(self, starting_vertex):
-        s = Stack()
-        s.push(starting_vertex)
-        visited = set()
-        while s.size > 0:
-            #Check if node has been visited. if not:
-            if v not in visited:
-                # mark as visited
-                print(v)
-                visited.add(v)
-                # call dft_recursive on neighbors
-                for neighbor in self.get_neighbors(v):
-                    dft_recursive(neighbor)
+        if visited is None:
+            visited = set()
+        #Check if node has been visited. if not:
+        if starting_vertex not in visited:
+            # mark as visited
+            visited.add(starting_vertex)
+            # call dft_recursive on neighbors
+            for neighbor in self.get_neighbors(starting_vertex):
+                dft_recursive(neighbor)
 
 
     def bfs(self, starting_vertex, destination_vertex):
         # create a queue
         q = Queue()
         # enqueue A PATH TO the starting vertex
-        path = path + [starting_vertex]
-        q.enqueue(path)
+        q.enqueue([starting_vertex])
         # create a set to store visitied v
         visited = set()
         # while queue is full:
@@ -93,18 +94,17 @@ class Graph:
             # check if visited. if not:
             if v not in visited:
                 # mark as visited
-                print(v)
                 visited.add(v)
                 # CHECK IF ITS THE TARGET
                 if v == destination_vertex:
                     # IF SO, RETURN PATH
                     return path
             # Enqueue PATH to its neighbros
-            for neighbor in self.get_neighbors(path):
+            for neighbor in self.get_neighbors(v):
                 # MAKE A COPY OF PATH
-                path.copy()
+                path_copy = path.copy()
                 # ENQUEUE THE COPY
-                path.enqueue()
+                path_copy.enqueue()
 
     def dfs(self, starting_vertex, destination_vertex):
         # create a stack
@@ -132,28 +132,34 @@ class Graph:
             # Enqueue PATH to its neighbros
             for neighbor in self.get_neighbors(path):
                 # MAKE A COPY OF PATH
-                path.copy()
-                # ENQUEUE THE COPY
-                s.push(path)
+                path_copy = path.copy()
+                # PUSH THE COPY
+                s.push(path_copy)
 
-    def dfs_recursive(self, starting_vertex):
-        s = Stack()
-        path = path + [starting_vertex]
-        s.push(path)
-        visited = set()
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=None, path=None):
+        if visited is None:
+            visitied = set()
 
-        while s.size > 0:
-            path = s.pop()
-            v = path[-1]
-            
-            if v not in visited:
-                print(v)
-                visited.add(v)
-                if v == destination_vertex:
-                    return path
+        if path is None:
+            path = []
 
-            for neighbor in self.get_neighbors(path):
-                dfs_recursive(neighbor)
+        visited.add(starting_vertex)
+        path_copy = path.copy()
+        path_copy.append(starting_vertex)
+
+        if starting_vertex == destination_vertex:
+            return path_copy
+
+        if starting_vertex not in visited:
+            visited.add(starting_vertex)
+            path_copy = path.copy()
+
+        else neighbor in self.get_neighbors(starting_vertex):
+            new_path = self.dfs_recursive(neighbor, destination_vertex, visited, path)
+            if new_path is not None:
+                return new_path
+            else:
+                return None
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
