@@ -32,13 +32,12 @@ class SocialGraph:
 
     def populate_graph(self, num_users, avg_friendships):
         """
-        Takes a number of users and an average number of friendships
-        as arguments
+        Takes num of users and an average num of friendships as args
 
-        Creates that number of users and a randomly distributed friendships
-        between those users.
+        Creates that num of users and randomly distributed friendships
+        between them.
 
-        Users num must be greater than the average number of friendships.
+        Users num > avg number of friendships.
         """
         # Reset graph
         self.last_id = 0
@@ -60,21 +59,36 @@ class SocialGraph:
         random.shuffle(possible_friendships)
 
         # create N friendships where n = avg_friendships * num_users // 2
-        # avg_friends = total_friends / num_users
         for i in range(num_users * avg_friendships // 2):
             friendship = possible_friendships[i]
             self.add_friendship( (friendship[0], friendship[1])
 )
     def get_all_social_paths(self, user_id):
         """
-        Takes a user's user_id as argument
+        Return dict with every user in user's extended network 
+        with the shortest friendship path between them:
 
-        Returns dict with every user in that user's
-        extended network with the shortest friendship path between them.
-
-        The key is the friend's ID and the value is the path.
+        ( key: friend's ID, value: path )
+        
         """
-        visited = {}  # This is a DICT, not a set
+        qq = Queue() # a Queue creates a list - Our PATH!
+
+        qq.enqueu([user_id])
+        
+        visited = {}  # DICT (not set) of all user's friends' user_ids
+
+        while qq.size() > 0:
+            path = qq.dequeue()
+
+            v=path[-1]
+
+            if v not in visited:
+                visited[v] = path # this builds a dict of paths from start to everyone else
+
+            for neighbor in self.friendships[v]:
+                path_copy = path.copy()
+                path_copy.append(neighbor)
+                qq.enqueue(path_copy)
 
         return visited
 
