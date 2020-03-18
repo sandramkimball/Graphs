@@ -1,3 +1,5 @@
+import random 
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -36,29 +38,44 @@ class SocialGraph:
         Creates that number of users and a randomly distributed friendships
         between those users.
 
-        The number of users must be greater than the average number of friendships.
+        Users num must be greater than the average number of friendships.
         """
         # Reset graph
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
-
         # Add users
+        for i in range(num_users):
+            self.add_user(f'User {i+1}')
 
         # Create friendships
+        # create N random friendships
+        # create all possible friendships
+        # shuffle list, grab the first N elements from list
+        possible_friendships=[]
+        for user_id in self.users: # for loop in for loop = O(n^2) 
+            for friend_id in range(user_id+1, self.last_id+1):
+                possible_friendships.append((user_id, friend_id))
 
+        random.shuffle(possible_friendships)
+
+        # create N friendships where n = avg_friendships * num_users // 2
+        # avg_friends = total_friends / num_users
+        for i in range(num_users * avg_friendships // 2):
+            friendship = possible_friendships[i]
+            self.add_friendship( (friendship[0], friendship[1])
+)
     def get_all_social_paths(self, user_id):
         """
-        Takes a user's user_id as an argument
+        Takes a user's user_id as argument
 
-        Returns a dictionary containing every user in that user's
+        Returns dict with every user in that user's
         extended network with the shortest friendship path between them.
 
         The key is the friend's ID and the value is the path.
         """
-        visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        visited = {}  # This is a DICT, not a set
+
         return visited
 
 

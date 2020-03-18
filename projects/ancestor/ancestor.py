@@ -30,7 +30,7 @@ def earliest_ancestor(ancestors, starting_node):
     #         mark as visited
             visited.add(v)
     #         push parent onto stack
-            for parent in self.get_parents(v):
+            for parent in get_parents(ancestors, v):
                 s.push(parent)
 
     if len(ancestors) == 2:
